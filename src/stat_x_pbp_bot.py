@@ -11,11 +11,10 @@ def handler(event, context):
     logging = Logger()
     logging.info("lambda started")
     team = event['team']
-    eventId = event['eventId']
+    eventId = event['eventId'] 
     previousStats = event['stats'] if 'stats' in event else { "previousData": [], "currentInning": "", "dueUp": []}
     if ('secrets' not in event):
         event['secrets'] = get_secret()
-    secrets = event['secrets']
     response = stat_request(team, eventId)
     if ("error" in response):
         print(response["error"])
@@ -34,8 +33,6 @@ def handler(event, context):
     }
     event['stats'] = retStats
     event['post'] = currentPost
-    logging.info("post: " + currentPost)
 
-    responseCode = x_post(secrets, currentPost)
-    logging.info("response_code:" + str(responseCode))
+    x_post(event['secrets'], currentPost)
     return event

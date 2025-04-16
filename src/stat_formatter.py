@@ -1,27 +1,11 @@
 def format_runners(stats):
-    # match stats["runnersOn"]:
-    #     case "0": return "Bases empty"
-    #     case "1": return "Runner on 1st"
-    #     case "2": return "Runner on 2nd"
-    #     case "3": return "Runner on 3rd"
-    #     case "4": return "Runners on 1st and 2nd"
-    #     case "5": return "Runners on 2nd and 3rd"
-    #     case "6": return "Runners on 1st and 3rd"
-    #     case "7": return "Based Loaded"
-    #     case _: return ""
     runnersOn = stats["runnersOn"]
     fb = '■' if (runnersOn == "1" or runnersOn == "4" or runnersOn == "6" or runnersOn == "7") else '□'
     sb = '■' if (runnersOn == "2" or runnersOn == "4" or runnersOn == "5" or runnersOn == "7") else '□'
     tb = '■' if (runnersOn == "3" or runnersOn == "5" or runnersOn == "6" or runnersOn == "7") else '□'
-    return f'   {sb}\n /   \\ \n{tb}     {fb}'
+    return f'    {sb}\n  /   \\ \n{tb}     {fb}'
 
 def format_outs(stats):
-    # match stats["numOuts"]:
-    #     case 0: return "No Outs"
-    #     case 1: return "1 Out"
-    #     case 2: return "2 Outs"
-    #     case _: return ""
-
     return f'Outs: {stats["numOuts"]}'
 
 def format_score(stats):
@@ -98,18 +82,18 @@ def format_pbp(stats, previousStats):
 def stat_format(stats, previousStats):
     # print(stats)
     new_pbp = format_pbp(stats, previousStats)
-    if (len(new_pbp) == 0):
-        return ""
-    new_pbp = new_pbp + '\n\n'
     curInning = stats["currentInning"]
     prevInning = previousStats["currentInning"]
     if (curInning != prevInning and prevInning != "" and prevInning[:3] != "Mid" and prevInning[:3] != "End"): 
         curInning = curInning.replace("Top", "End").replace("Bot", "Mid")
-        if (curInning == "End 9" and stats["visitorScore"] != stats["homeScore"]):
-            curInning = "Final"
-        if (curInning == "Mid 9" and int(stats["homeScore"]) > int(stats["visitorScore"])):
-            curInning = "Final"
+    if (curInning == "End 9" and stats["visitorScore"] != stats["homeScore"]):
+        curInning = "Final"
+    if (curInning == "Mid 9" and int(stats["homeScore"]) > int(stats["visitorScore"])):
+        curInning = "Final"
     stats["currentInning"] = curInning
+    if (len(new_pbp) == 0 and curInning != "Final"):
+        return ""
+    new_pbp = new_pbp + '\n\n'
 
     match curInning[:3]:
         case "Top":
@@ -126,4 +110,3 @@ def stat_format(stats, previousStats):
             return ""
         case _:
             print("no inn found")
-
