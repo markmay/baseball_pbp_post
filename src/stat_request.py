@@ -15,4 +15,3 @@ def stat_request(team, eventId):
         return { "error": r.status_code, "content": "" }
     else:
         return { "error": r.status_code}
-
